@@ -1,19 +1,10 @@
-from models.order import db, Order
-from datetime import datetime
+from services.order_service import OrderService
 
 class OrderController:
     @staticmethod
     def create_order(data):
-        order = Order(
-            customer_id=data['customer_id'],
-            product_id=data['product_id'],
-            quantity=data['quantity'],
-            total_price=data['total_price']
-        )
-        db.session.add(order)
-        db.session.commit()
-        return order
+        return OrderService.create_order(data)
 
     @staticmethod
     def get_order_by_id(order_id):
-        return Order.query.get(order_id)
+        return OrderService.get_order_by_id(order_id)
