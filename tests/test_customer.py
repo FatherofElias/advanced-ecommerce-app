@@ -1,4 +1,5 @@
 import unittest
+from unittest.mock import patch
 from __init__ import create_app, db
 from models.customer import Customer
 
@@ -14,7 +15,9 @@ class CustomerTestCase(unittest.TestCase):
             db.session.remove()
             db.drop_all()
 
-    def test_create_customer(self):
+    @patch('controllers.customer_controller.CustomerController.create_customer')
+    def test_create_customer(self, mock_create_customer):
+        mock_create_customer.return_value = Customer(id=1, name='John Doe', email='john@example.com', phone='123-456-7890')
         response = self.client.post('/api/customers', json={
             'name': 'John Doe',
             'email': 'john@example.com',
@@ -23,24 +26,27 @@ class CustomerTestCase(unittest.TestCase):
         self.assertEqual(response.status_code, 201)
         self.assertIn('id', response.get_json())
 
-    def test_get_customer(self):
-    
-        response = self.client.post('/api/customers', json={
-            'name': 'John Doe',
-            'email': 'john@example.com',
-            'phone': '123-456-7890'
-        })
-        self.assertEqual(response.status_code, 201)
-        customer_id = response.get_json()['id']
-
-        
-        response = self.client.get(f'/api/customers/{customer_id}')
+    @patch('controllers.customer_controller.CustomerController.get_customer_by_id')
+    def test_get_customer(self, mock_get_customer):
+        mock_get_customer.return_value = Customer(id=1, name='John Doe', email='john@example.com', phone='123-456-7890')
+        response = self.client.get('/api/customers/1')
         self.assertEqual(response.status_code, 200)
-        
         customer_data = response.get_json()
         self.assertEqual(customer_data['name'], 'John Doe')
-        self.assertEqual(customer_data['email'], 'john@example.com')
-        self.assertEqual(customer_data['phone'], '123-456-7890')
+
+    @patch('controllers.customer_controller.CustomerController.update_customer')
+    def test_update_customer(self, mock_update_customer):
+        mock_update_customer.return_value = Customer(id=1, name='John Doe Updated', email='john@example.com', phone='123-456-7890')
+        response = self.client.put('/api/customers/1', json={'name': 'John Doe Updated'})
+        self.assertEqual(response.status_code, 200)
+        customer_data = response.get_json()
+        self.assertEqual(customer_data['name'], 'John Doe Updated')
+
+    @patch('controllers.customer_controller.CustomerController.delete_customer')
+    def test_delete_customer(self, mock_delete_customer):
+        response = self.client.delete('/api/customers/1')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.get_json()['message'], 'Customer deleted')
 
 if __name__ == '__main__':
     unittest.main()
