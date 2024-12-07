@@ -24,7 +24,7 @@ class CustomerTestCase(unittest.TestCase):
         self.assertIn('id', response.get_json())
 
     def test_get_customer(self):
-        # First, create a customer
+    
         response = self.client.post('/api/customers', json={
             'name': 'John Doe',
             'email': 'john@example.com',
@@ -33,7 +33,7 @@ class CustomerTestCase(unittest.TestCase):
         self.assertEqual(response.status_code, 201)
         customer_id = response.get_json()['id']
 
-        # Retrieve the created customer
+        
         response = self.client.get(f'/api/customers/{customer_id}')
         self.assertEqual(response.status_code, 200)
         

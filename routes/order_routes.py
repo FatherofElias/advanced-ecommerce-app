@@ -1,12 +1,9 @@
 from flask import Blueprint, request, jsonify
 from controllers.order_controller import OrderController
 from flask_jwt_extended import jwt_required
-from flask_caching import Cache
-from flask_limiter import Limiter
+from __init__ import cache, limiter
 
 order_bp = Blueprint('order_bp', __name__)
-cache = Cache()
-limiter = Limiter()
 
 @order_bp.route('/orders', methods=['POST'])
 @jwt_required()

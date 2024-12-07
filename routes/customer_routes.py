@@ -1,12 +1,9 @@
 from flask import Blueprint, request, jsonify
 from controllers.customer_controller import CustomerController
 from flask_jwt_extended import jwt_required
-from flask_caching import Cache
-from flask_limiter import Limiter
+from __init__ import cache, limiter
 
 customer_bp = Blueprint('customer_bp', __name__)
-cache = Cache()
-limiter = Limiter()
 
 @customer_bp.route('/customers', methods=['POST'])
 @jwt_required()
@@ -40,3 +37,4 @@ def update_customer(customer_id):
 def delete_customer(customer_id):
     CustomerController.delete_customer(customer_id)
     return jsonify({'message': 'Customer deleted'}), 200
+

@@ -1,12 +1,9 @@
 from flask import Blueprint, request, jsonify
 from controllers.product_controller import ProductController
 from flask_jwt_extended import jwt_required
-from flask_caching import Cache
-from flask_limiter import Limiter
+from __init__ import cache, limiter
 
 product_bp = Blueprint('product_bp', __name__)
-cache = Cache()
-limiter = Limiter()
 
 @product_bp.route('/products', methods=['POST'])
 @jwt_required()

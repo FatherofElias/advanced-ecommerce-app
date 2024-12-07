@@ -1,12 +1,9 @@
 from flask import Blueprint, request, jsonify
 from controllers.customer_controller import CustomerController
 from flask_jwt_extended import jwt_required
-from flask_caching import Cache
-from flask_limiter import Limiter
+from __init__ import cache, limiter
 
 account_bp = Blueprint('account_bp', __name__)
-cache = Cache()
-limiter = Limiter()
 
 @account_bp.route('/customer_accounts', methods=['POST'])
 @jwt_required()
