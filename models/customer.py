@@ -1,18 +1,12 @@
-from . import db
+from database import db
 
 class Customer(db.Model):
-    __tablename__ = 'customers'
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), nullable=False)
-    email = db.Column(db.String(100), nullable=False)
-    phone = db.Column(db.String(20), nullable=False)
-    account = db.relationship('CustomerAccount', backref='customer', uselist=False, cascade='all, delete')
+    name = db.Column(db.String(80), nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    phone = db.Column(db.String(20), nullable=True)
+    account_id = db.Column(db.Integer, db.ForeignKey('customer_account.id'))
+    account = db.relationship('CustomerAccount', back_populates='customers')
 
-    def to_dict(self):
-        return {
-            'id': self.id,
-            'customer_id': self.customer_id,
-            'product_id': self.product_id,
-            'quantity': self.quantity,
-            'total_price': self.total_price
-        }
+    def __repr__(self):
+        return f'<Customer {self.name}>'

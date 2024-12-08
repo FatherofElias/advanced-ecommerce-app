@@ -2,16 +2,29 @@ from flask import Blueprint, request, jsonify
 from controllers.product_controller import ProductController
 from flask_jwt_extended import jwt_required
 from __init__ import cache, limiter
+from models.schemas.product_schema import ProductSchema
 
 product_bp = Blueprint('product_bp', __name__)
+product_schema = ProductSchema()
 
 @product_bp.route('/products', methods=['POST'])
 @jwt_required()
-@limiter.limit("100 per day")
 def create_product():
-    data = request.get_json()
-    product = ProductController.create_product(data)
-    return jsonify(product.to_dict()), 201
+    try:
+        data = request.get_json()
+        print(f"Data received: {data}")
+        errors = product_schema.validate(data)
+        if errors:
+            print(f"Validation errors: {errors}")
+            return jsonify(errors), 400
+
+        product = ProductController.create_product(data)
+        print(f"Product created: {product.to_dict()}")
+        return jsonify(product.to_dict()), 201
+    except Exception as e:
+        print(f"Error during product creation: {e}")
+        return jsonify({"message": str(e)}), 500
+
 
 @product_bp.route('/products/<int:product_id>', methods=['GET'])
 @jwt_required()

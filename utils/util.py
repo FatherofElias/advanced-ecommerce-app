@@ -5,9 +5,9 @@ from flask import current_app
 def encode_token(user_id):
     try:
         payload = {
-            'exp': datetime.datetime.utcnow() + datetime.timedelta(days=1),
-            'iat': datetime.datetime.utcnow(),
-            'sub': user_id
+            'exp': datetime.datetime.now() + datetime.timedelta(days=1),
+            'iat': datetime.datetime.now(),
+            'sub': str(user_id)
         }
         return jwt.encode(
             payload,

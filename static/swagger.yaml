@@ -245,7 +245,7 @@ paths:
           description: "Admin access required"
 
 
-  /products:
+
     get:
       summary: "List products"
       responses:

@@ -4,7 +4,7 @@ from models.product import Product
 class ProductService:
     @staticmethod
     def create_product(data):
-        product = Product(name=data['name'], price=data['price'])
+        product = Product(name=data['name'], price=data['price'], stock=data['stock'])
         db.session.add(product)
         db.session.commit()
         return product
