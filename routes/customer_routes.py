@@ -3,20 +3,21 @@ from controllers.customer_controller import CustomerController
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from __init__ import cache, limiter
 from models.schemas.customer_schema import CustomerSchema
-from models.customer import Customer
+from utils.jwt_utils import get_current_user
+import functools
 
 customer_bp = Blueprint('customer_bp', __name__)
 customer_schema = CustomerSchema()
 
+
 def admin_required(fn):
+    @functools.wraps(fn)
+    @jwt_required()
     def wrapper(*args, **kwargs):
-        current_user_id = get_jwt_identity()
-        current_user = Customer.query.get(current_user_id)
-        if current_user and current_user.is_admin:
-            return fn(*args, **kwargs)
-        else:
-            return jsonify({"message": "Admin access required"}), 403
-    wrapper.__name__ = fn.__name__
+        user = get_current_user()
+        if user['role'] != 'admin':
+            return jsonify({'message': 'Admin access required'}), 403
+        return fn(*args, **kwargs)
     return wrapper
 
 @customer_bp.route('/customers', methods=['POST'])
@@ -36,7 +37,7 @@ def create_customer():
 
         customer = CustomerController.create_customer(data)
         print(f"Customer created: {customer.to_dict()}")
-        cache.delete_memoized(list_customers)  # Clear cache on create
+        cache.delete_memoized(list_customers)  
         return jsonify(customer.to_dict()), 201
     except Exception as e:
         print(f"Error during customer creation: {e}")
@@ -60,7 +61,7 @@ def update_customer(customer_id):
         data = request.get_json()
         customer = CustomerController.update_customer(customer_id, data)
         if customer:
-            cache.delete_memoized(get_customer, customer_id)  # Clear cache on update
+            cache.delete_memoized(get_customer, customer_id) 
             return jsonify(customer.to_dict()), 200
         return jsonify({'message': 'Customer not found'}), 404
     except Exception as e:
@@ -72,11 +73,12 @@ def update_customer(customer_id):
 def delete_customer(customer_id):
     try:
         CustomerController.delete_customer(customer_id)
-        cache.delete_memoized(get_customer, customer_id)  # Clear cache on delete
-        cache.delete_memoized(list_customers)  # Clear cache on delete
+        cache.delete_memoized(get_customer, customer_id) 
+        cache.delete_memoized(list_customers)  
         return jsonify({'message': 'Customer deleted'}), 200
     except Exception as e:
         return jsonify({'message': str(e)}), 500
+
 
 @customer_bp.route('/customers', methods=['GET'])
 @limiter.limit("100/day")

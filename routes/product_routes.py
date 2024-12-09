@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 from controllers.product_controller import ProductController
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, get_current_user
 from __init__ import cache, limiter
 from models.schemas.product_schema import ProductSchema
 
@@ -11,24 +11,21 @@ product_schema = ProductSchema()
 @jwt_required()
 @limiter.limit("100/day")
 def create_product():
-    try:
-        data = request.get_json()
-        print(f"Data received: {data}")
-        if not data:
-            return jsonify({"message": "No input data provided"}), 400
+    user_identity = get_current_user()
+    print(f"User identity: {user_identity}")  
 
-        errors = product_schema.validate(data)
-        if errors:
-            print(f"Validation errors: {errors}")
-            return jsonify(errors), 422
+    data = request.get_json()
+    if not data:
+        return jsonify({"message": "No input data provided"}), 400
 
-        product = ProductController.create_product(data)
-        print(f"Product created: {product.to_dict()}")
-        cache.delete_memoized(list_products)
-        return jsonify(product.to_dict()), 201
-    except Exception as e:
-        print(f"Error during product creation: {e}")
-        return jsonify({"message": str(e)}), 500
+    errors = product_schema.validate(data)
+    if errors:
+        return jsonify(errors), 422
+
+    product = ProductController.create_product(data)
+    cache.delete_memoized(list_products) 
+    return jsonify(product.to_dict()), 201
+
 
 @product_bp.route('/products/<int:product_id>', methods=['GET'])
 @jwt_required()
@@ -61,7 +58,7 @@ def delete_product(product_id):
     try:
         ProductController.delete_product(product_id)
         cache.delete_memoized(get_product, product_id)  
-        cache.delete_memoized(list_products) 
+        cache.delete_memoized(list_products)  
         return jsonify({'message': 'Product deleted'}), 200
     except Exception as e:
         return jsonify({'message': str(e)}), 500

@@ -1,14 +1,12 @@
 from flask import Blueprint, request, jsonify
-from models.customer_account import CustomerAccount
-from models.schemas.customer_account_schema import CustomerAccountSchema
-from werkzeug.security import generate_password_hash, check_password_hash
-from utils.jwt_utils import generate_token, get_current_user
-from flask_jwt_extended import jwt_required
+from werkzeug.security import generate_password_hash
+from utils.jwt_utils import generate_token
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from flask import Blueprint, request, jsonify
 from models.employee import Employee
 from models.schemas.employee_schema import EmployeeSchema
-from werkzeug.security import generate_password_hash, check_password_hash
-from utils.jwt_utils import generate_token, get_current_user
+from werkzeug.security import generate_password_hash 
+from utils.jwt_utils import generate_token
 from flask_jwt_extended import jwt_required
 from __init__ import db
 
@@ -48,8 +46,15 @@ def register():
     token = generate_token(new_employee)
     return jsonify({'token': token, 'message': 'Account created successfully'}), 201
 
+
+
 @auth_bp.route('/protected', methods=['GET'])
 @jwt_required()
 def protected():
-    user = get_current_user()
-    return jsonify({'message': 'Protected endpoint', 'user': user}), 200
+    try:
+        current_user_id = get_jwt_identity()
+        print(f"Current user ID: {current_user_id}")
+        return jsonify({"message": f"Access granted for user {current_user_id}"}), 200
+    except Exception as e:
+        print(f"Error in protected route: {e}")
+        return jsonify({"message": str(e)}), 500

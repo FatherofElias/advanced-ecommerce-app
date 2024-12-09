@@ -2,12 +2,12 @@ import jwt
 import datetime
 from flask import current_app
 
-def encode_token(user_id):
+def encode_token(employee_id):
     try:
         payload = {
             'exp': datetime.datetime.now() + datetime.timedelta(days=1), 
             'iat': datetime.datetime.now(),
-            'sub': user_id
+            'sub': employee_id
         }
         return jwt.encode(
             payload,
