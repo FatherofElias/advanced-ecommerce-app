@@ -6,7 +6,6 @@ class CustomerAccount(db.Model):
     username = db.Column(db.String(80), unique=True, nullable=False)
     password = db.Column(db.String(200), nullable=False)
     role = db.Column(db.String(50), nullable=False, default='user')
-    customers = db.relationship('Customer', back_populates='account')
 
     def __repr__(self):
         return f'<CustomerAccount {self.username}>'

@@ -1,10 +1,14 @@
-from models import db
+from database import db
 from models.product import Product
 
 class ProductService:
     @staticmethod
     def create_product(data):
-        product = Product(name=data['name'], price=data['price'], stock=data['stock'])
+        product = Product(
+            id=data['id'],
+            name=data['name'],
+            price=data['price']
+        )
         db.session.add(product)
         db.session.commit()
         return product
@@ -17,6 +21,7 @@ class ProductService:
     def update_product(product_id, data):
         product = Product.query.get(product_id)
         if product:
+            product.id = data.get('id', product.id)
             product.name = data.get('name', product.name)
             product.price = data.get('price', product.price)
             db.session.commit()

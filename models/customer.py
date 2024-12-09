@@ -5,8 +5,14 @@ class Customer(db.Model):
     name = db.Column(db.String(80), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     phone = db.Column(db.String(20), nullable=True)
-    account_id = db.Column(db.Integer, db.ForeignKey('customer_account.id'))
-    account = db.relationship('CustomerAccount', back_populates='customers')
 
     def __repr__(self):
         return f'<Customer {self.name}>'
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'email': self.email,
+            'phone': self.phone
+        }

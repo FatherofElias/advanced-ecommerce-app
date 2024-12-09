@@ -1,3 +1,4 @@
+
 from services.customer_service import CustomerService
 
 class CustomerController:
@@ -18,17 +19,5 @@ class CustomerController:
         return CustomerService.delete_customer(customer_id)
 
     @staticmethod
-    def create_customer_account(data):
-        return CustomerService.create_customer_account(data)
-
-    @staticmethod
-    def get_customer_account_by_id(account_id):
-        return CustomerService.get_customer_account_by_id(account_id)
-
-    @staticmethod
-    def update_customer_account(account_id, data):
-        return CustomerService.update_customer_account(account_id, data)
-
-    @staticmethod
-    def delete_customer_account(account_id):
-        return CustomerService.delete_customer_account(account_id)
+    def list_customers():
+        return CustomerService.list_customers()

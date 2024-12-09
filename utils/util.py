@@ -5,9 +5,9 @@ from flask import current_app
 def encode_token(user_id):
     try:
         payload = {
-            'exp': datetime.datetime.now() + datetime.timedelta(days=1),
+            'exp': datetime.datetime.now() + datetime.timedelta(days=1), 
             'iat': datetime.datetime.now(),
-            'sub': str(user_id)
+            'sub': user_id
         }
         return jwt.encode(
             payload,
@@ -15,7 +15,7 @@ def encode_token(user_id):
             algorithm='HS256'
         )
     except Exception as e:
-        return str(e)
+        return e
 
 def decode_token(token):
     try:

@@ -8,6 +8,7 @@ def run():
     with app.app_context():
         db.create_all()
 
+
     SWAGGER_URL = '/api/docs'
     API_URL = '/static/swagger.yaml'
 
