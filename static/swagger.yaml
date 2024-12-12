@@ -231,6 +231,9 @@ paths:
           schema:
             type: "object"
             properties:
+              id:
+                type: "number"
+                format: "integer"
               name:
                 type: "string"
               price:

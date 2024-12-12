@@ -5,9 +5,9 @@ from flask import current_app
 def encode_token(employee_id):
     try:
         payload = {
-            'exp': datetime.datetime.now() + datetime.timedelta(days=1), 
+            'exp': datetime.datetime.now() + datetime.timedelta(days=1),
             'iat': datetime.datetime.now(),
-            'sub': employee_id
+            'identity': employee_id
         }
         return jwt.encode(
             payload,
@@ -16,11 +16,11 @@ def encode_token(employee_id):
         )
     except Exception as e:
         return e
-
+    
 def decode_token(token):
     try:
         payload = jwt.decode(token, current_app.config.get('SECRET_KEY'), algorithms=['HS256'])
-        return payload['sub']
+        return payload['identity']
     except jwt.ExpiredSignatureError:
         return 'Token has expired'
     except jwt.InvalidTokenError:

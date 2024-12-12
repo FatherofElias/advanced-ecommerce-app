@@ -7,7 +7,7 @@ from flask_limiter import Limiter
 from flask_jwt_extended import JWTManager
 
 cache = Cache()
-jwt = JWTManager()
+
 
 def key_func():
     return request.remote_addr
@@ -22,6 +22,7 @@ def create_app(config_name):
     ma.init_app(app)
     cache.init_app(app)
     limiter.init_app(app)
+    jwt = JWTManager(app)
     jwt.init_app(app)
 
     with app.app_context():

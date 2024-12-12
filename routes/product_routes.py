@@ -7,7 +7,7 @@ from models.schemas.product_schema import ProductSchema
 product_bp = Blueprint('product_bp', __name__)
 product_schema = ProductSchema()
 
-@product_bp.route('/products', methods=['POST'])
+@product_bp.route('/products', methods=['POST']) 
 @jwt_required()
 @limiter.limit("100/day")
 def create_product():
