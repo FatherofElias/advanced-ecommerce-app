@@ -1,5 +1,4 @@
 from flask import Flask, request
-from flask_cors import CORS
 from database import db
 from schema import ma
 from flask_caching import Cache

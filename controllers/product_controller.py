@@ -1,7 +1,5 @@
-from services.product_service import ProductService
 from models.product import Product
 from database import db
-from sqlalchemy import func
 
 class ProductController:
     @staticmethod
