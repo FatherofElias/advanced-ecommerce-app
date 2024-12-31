@@ -1,12 +1,13 @@
 import sys
 import os
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+# Add the app directory to the system path
+sys.path.insert(0, os.path.abspath('C:\\Users\\Dyfficult\\e_commerce_app'))
 
 import unittest
 from unittest.mock import patch
 from flask_jwt_extended import create_access_token
-from ..__init__ import create_app, db
+from __init__ import create_app, db
 from models.customer import Customer
 import sqlalchemy.exc
 
