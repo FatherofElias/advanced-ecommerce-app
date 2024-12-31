@@ -5,3 +5,4 @@ class CustomerAccountSchema(Schema):
     username = fields.Str(required=True)
     password = fields.Str(load_only=True, required=True)
     role = fields.Str()
+
