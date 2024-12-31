@@ -40,15 +40,24 @@ jobs:
       with:
         python-version: '3.11'
 
+
+    - name: Install libpq-dev
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libpq-dev
+
+    - name: Create virtual envlrorment
+      run: |
+        python -m venv venv
+        source venv/bin/activate
+
     - name: Set environment variables
       run: |
         echo "DATABASE_URL=postgresql://e_commerce_db_mbe1_user:mQl9Fr7eeKtdztUQxkFcRDtoVNEprSYg@dpg-ctq2pibtq21c739sun5g-a.ohio-postgres.render.com/e_commerce_db_mbe1" >> $GITHUB_ENV
 
 
-    - name: Deploy to Render
-      run: |
-        render deploy e_commerce_db
-
-    - name: Run Gunicorn
-      run: |
-        gunicorn --bind 0.0.0.0:8000 app:app
+    - name: Deploy to production
+      uses: johnbeynon/render-deploy-action@v0.0.8
+      with:
+        service-id: ${{ secrets.SERVICE_ID }}
+        api-key: ${{ secrets.RENDER_API_KEY }}
