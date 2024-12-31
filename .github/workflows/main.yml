@@ -44,9 +44,6 @@ jobs:
       run: |
         echo "DATABASE_URL=postgresql://e_commerce_db_mbe1_user:mQl9Fr7eeKtdztUQxkFcRDtoVNEprSYg@dpg-ctq2pibtq21c739sun5g-a.ohio-postgres.render.com/e_commerce_db_mbe1" >> $GITHUB_ENV
 
-    - name: Install Render CLI
-      run: |
-        curl -fsSL https://render.com/install | bash
 
     - name: Deploy to Render
       run: |
