@@ -1,6 +1,4 @@
-import os
-from requests import request
-from flask import Flask
+from flask import Flask, request
 from database import db
 from schema import ma
 from flask_caching import Cache

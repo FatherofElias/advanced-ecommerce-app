@@ -3,7 +3,14 @@ from services.customer_service import CustomerService
 class CustomerController:
     @staticmethod
     def create_customer(data):
-        return CustomerService.create_customer(data)
+        try:
+            print(f"Data in create_customer: {data}")
+            customer = CustomerService.create_customer(data)
+            print(f"Customer created: {customer.to_dict()}")
+            return customer
+        except Exception as e:
+            print(f"Error in create_customer: {e}")
+            raise e
 
     @staticmethod
     def get_customer_by_id(customer_id):

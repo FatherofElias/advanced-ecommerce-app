@@ -1,13 +1,7 @@
-import sys
-import os
-
-
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
 import unittest
 from unittest.mock import patch
 from flask_jwt_extended import create_access_token
-from __init__ import create_app, db
+from .. import create_app, db
 from models.customer import Customer
 import sqlalchemy.exc
 
