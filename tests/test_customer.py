@@ -36,17 +36,20 @@ class CustomerTestCase(unittest.TestCase):
             'Authorization': f'Bearer {self.token}'
         }
 
-    @patch('controllers.customer_controller.CustomerController.create_customer')
-    def test_create_customer(self, mock_create_customer):
-        mock_create_customer.return_value = Customer(id=2, name='John Doe', email='john@example.com', phone='123-456-7890')
-        response = self.client.post('/customers', json={
-            'name': 'John Doe',
-            'email': 'john@example.com',
-            'phone': '123-456-7890'
-        }, headers=self.get_headers())
-        print(f"Response: {response.get_json()}")
-        self.assertEqual(response.status_code, 201)
-        self.assertIn('id', response.get_json())
+@patch('controllers.customer_controller.CustomerController.create_customer')
+def test_create_customer(self, mock_create_customer):
+    mock_create_customer.return_value = Customer(id=2, name='John Doe', email='john@example.com', phone='123-456-7890')
+    response = self.client.post('/customers', json={
+        'name': 'John Doe',
+        'email': 'john@example.com',
+        'phone': '123-456-7890'
+    }, headers=self.get_headers())
+    print(f"Request data: {{'name': 'John Doe', 'email': 'john@example.com', 'phone': '123-456-7890'}}")
+    print(f"Response status code: {response.status_code}")
+    print(f"Response data: {response.get_json()}")
+    self.assertEqual(response.status_code, 201)
+    self.assertIn('id', response.get_json())
+
 
     @patch('controllers.customer_controller.CustomerController.get_customer_by_id')
     def test_get_customer(self, mock_get_customer):
