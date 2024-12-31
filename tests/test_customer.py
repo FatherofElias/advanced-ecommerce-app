@@ -1,8 +1,8 @@
 import sys
 import os
 
-# Add the app directory to the system path
-sys.path.insert(0, os.path.abspath('C:\\Users\\Dyfficult\\e_commerce_app'))
+
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 import unittest
 from unittest.mock import patch
