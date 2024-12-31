@@ -4,14 +4,19 @@ from models.customer import Customer
 class CustomerService:
     @staticmethod
     def create_customer(data):
-        customer = Customer(
-            name=data['name'],
-            email=data['email'],
-            phone=data.get('phone') 
-        )
-        db.session.add(customer)
-        db.session.commit()
-        return customer
+        try:
+            customer = Customer(
+                name=data['name'],
+                email=data['email'],
+                phone=data.get('phone')
+            )
+            db.session.add(customer)
+            db.session.commit()
+            return customer
+        except Exception as e:
+            print(f"Error creating customer: {e}")
+            raise e
+
 
     @staticmethod
     def get_customer_by_id(customer_id):
