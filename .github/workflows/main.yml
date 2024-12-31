@@ -40,8 +40,15 @@ jobs:
       with:
         python-version: '3.x'
 
-    
+    - name: Set environment variables
+      run: |
+        echo "DATABASE_URL=postgresql://e_commerce_db_mbe1_user:mQl9Fr7eeKtdztUQxkFcRDtoVNEprSYg@dpg-ctq2pibtq21c739sun5g-a.ohio-postgres.render.com/e_commerce_db_mbe1" >> $GITHUB_ENV
+
 
     - name: Deploy to Render
       run: |
-        #
+        render deploy e_commerce_db
+
+    - name: Run Gunicorn
+      run: |
+        gunicorn app:app
