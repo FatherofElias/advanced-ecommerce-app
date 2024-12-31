@@ -6,6 +6,7 @@ class DevelopmentConfig:
     SQLALCHEMY_DATABASE_URI = 'postgresql://e_commerce_db_mbe1_user:mQl9Fr7eeKtdztUQxkFcRDtoVNEprSYg@dpg-ctq2pibtq21c739sun5g-a.ohio-postgres.render.com/e_commerce_db_mbe1'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     DEBUG = True
+    CACHE_TYPE = 'simple'
 
 
 class TestingConfig:
@@ -13,4 +14,5 @@ class TestingConfig:
     SQLALCHEMY_DATABASE_URI = 'sqlite:///test.db' 
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     TESTING = True
+    CACHE_TYPE = 'simple'
 
