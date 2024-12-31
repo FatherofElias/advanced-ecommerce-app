@@ -1,7 +1,8 @@
-from marshmallow import Schema, fields
+from pydantic import BaseModel, EmailStr
+from typing import Optional
 
-class CustomerSchema(Schema):
-    id = fields.Int(dump_only=True)
-    name = fields.Str(required=True)
-    email = fields.Email(required=True)
-    phone = fields.Str(required=False)
+class CustomerSchema(BaseModel):
+    id: Optional[int]
+    name: str
+    email: EmailStr
+    phone: Optional[str] = None

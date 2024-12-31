@@ -18,8 +18,6 @@ class CustomerService:
             print(f"Error creating customer: {e}")
             raise e
 
-
-
     @staticmethod
     def get_customer_by_id(customer_id):
         return Customer.query.get(customer_id)
