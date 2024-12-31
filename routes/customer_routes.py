@@ -24,19 +24,19 @@ def admin_required(fn):
 
 @customer_bp.route('/customers', methods=['POST'])
 @limiter.limit("100/day")
-@admin_required
 def create_customer():
     try:
         data = request.get_json()
         print(f"Data received in route: {data}")
+        if not data:
+            return jsonify({"message": "No input data provided"}), 400
 
-        try:
-            customer_data = CustomerSchema(**data)
-        except ValidationError as e:
-            print(f"Validation errors: {e.errors()}")
-            return jsonify(e.errors()), 422
+        errors = customer_schema.validate(data)
+        if errors:
+            print(f"Validation errors: {errors}")
+            return jsonify(errors), 422
 
-        customer = CustomerController.create_customer(customer_data.dict())
+        customer = CustomerController.create_customer(data)
         print(f"Customer created: {customer.to_dict()}")
         cache.delete_memoized(list_customers)
         return jsonify(customer.to_dict()), 201
@@ -47,9 +47,9 @@ def create_customer():
 
 
 
+
 @customer_bp.route('/customers/<int:customer_id>', methods=['GET'])
 @limiter.limit("100/day")
-@admin_required
 @cache.cached(timeout=60, key_prefix='customer_<int:customer_id>')
 def get_customer(customer_id):
     customer = CustomerController.get_customer_by_id(customer_id)
@@ -59,7 +59,6 @@ def get_customer(customer_id):
 
 @customer_bp.route('/customers/<int:customer_id>', methods=['PUT'])
 @limiter.limit("100/day")
-@admin_required
 def update_customer(customer_id):
     try:
         data = request.get_json()
@@ -73,7 +72,6 @@ def update_customer(customer_id):
 
 @customer_bp.route('/customers/<int:customer_id>', methods=['DELETE'])
 @limiter.limit("100/day")
-@admin_required
 def delete_customer(customer_id):
     try:
         CustomerController.delete_customer(customer_id)
@@ -86,7 +84,6 @@ def delete_customer(customer_id):
 
 @customer_bp.route('/customers', methods=['GET'])
 @limiter.limit("100/day")
-@admin_required
 @cache.cached(timeout=60, key_prefix='all_customers')
 def list_customers():
     customers = CustomerController.list_customers()
