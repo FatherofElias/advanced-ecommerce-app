@@ -40,6 +40,10 @@ jobs:
       with:
         python-version: '3.x'
 
+    - name: Install Render CLI
+      run: |
+        curl -fsSL https://render.com/install-cli | bash
+
     - name: Deploy to Render
       run: |
         render deploy e_commerce_db
