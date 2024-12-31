@@ -5,6 +5,7 @@ class CustomerService:
     @staticmethod
     def create_customer(data):
         try:
+            print(f"Data received in service: {data}")
             customer = Customer(
                 name=data['name'],
                 email=data['email'],
@@ -16,6 +17,7 @@ class CustomerService:
         except Exception as e:
             print(f"Error creating customer: {e}")
             raise e
+
 
 
     @staticmethod

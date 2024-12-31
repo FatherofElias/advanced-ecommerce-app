@@ -26,7 +26,7 @@ def admin_required(fn):
 def create_customer():
     try:
         data = request.get_json()
-        print(f"Data received: {data}")
+        print(f"Data received in route: {data}")
         if not data:
             return jsonify({"message": "No input data provided"}), 400
 
@@ -42,6 +42,7 @@ def create_customer():
     except Exception as e:
         print(f"Error during customer creation: {e}")
         return jsonify({"message": str(e)}), 500
+
 
 
 @customer_bp.route('/customers/<int:customer_id>', methods=['GET'])
