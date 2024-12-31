@@ -37,11 +37,12 @@ def create_customer():
 
         customer = CustomerController.create_customer(data)
         print(f"Customer created: {customer.to_dict()}")
-        cache.delete_memoized(list_customers)  
+        cache.delete_memoized(list_customers)
         return jsonify(customer.to_dict()), 201
     except Exception as e:
         print(f"Error during customer creation: {e}")
         return jsonify({"message": str(e)}), 500
+
 
 @customer_bp.route('/customers/<int:customer_id>', methods=['GET'])
 @limiter.limit("100/day")

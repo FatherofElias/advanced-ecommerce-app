@@ -51,6 +51,7 @@ class CustomerTestCase(unittest.TestCase):
         self.assertIn('id', response.get_json())
 
 
+
     @patch('controllers.customer_controller.CustomerController.get_customer_by_id')
     def test_get_customer(self, mock_get_customer):
         mock_get_customer.return_value = Customer(id=2, name='John Doe', email='john@example.com', phone='123-456-7890')
