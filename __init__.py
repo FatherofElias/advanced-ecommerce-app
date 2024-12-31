@@ -1,4 +1,6 @@
-from flask import Flask, request
+import os
+from requests import request
+from flask import Flask
 from database import db
 from schema import ma
 from flask_caching import Cache
@@ -6,7 +8,6 @@ from flask_limiter import Limiter
 from flask_jwt_extended import JWTManager
 
 cache = Cache()
-
 
 def key_func():
     return request.remote_addr
@@ -16,7 +17,7 @@ limiter = Limiter(key_func=key_func)
 def create_app(config_name):
     app = Flask(__name__)
     app.config.from_object(f'config.{config_name}')
-    app.config['JWT_SECRET_KEY'] = 'cd8cbabe8c9e4556acb3786fd8389b9b961e8a4f3b34e4748a6a8d4b97c7d4e1' 
+    app.config['JWT_SECRET_KEY'] = 'cd8cbabe8c9e4556acb3786fd8389b9b961e8a4f3b34e4748a6a8d4b97c7d4e1'
     db.init_app(app)
     ma.init_app(app)
     cache.init_app(app)
